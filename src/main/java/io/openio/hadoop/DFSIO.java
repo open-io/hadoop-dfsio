@@ -214,7 +214,7 @@ public class DFSIO implements Tool {
         FileSystem fs = FileSystem.get(uri, config);
 
         LOG.info("nrFiles = " + nrFiles);
-        LOG.info("size (MB) = " + nrBytes);
+        LOG.info("size (MB) = " + toMB(nrBytes));
         LOG.info("bufferSize = " + bufferSize);
         LOG.info("baseDir = " + getBaseDir(config));
 
