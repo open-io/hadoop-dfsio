@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/dfsio
     docker:
-      - image: circle-ci/openjdk:8-jdk-stretch
+      - image: circleci/openjdk:8-jdk-stretch
     steps:
       - checkout
       - restore_cache:
