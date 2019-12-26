@@ -28,6 +28,7 @@ public class DFSIO implements Tool {
                     " -read | -write | -clean" +
                     " [-nrFiles N]" +
                     " [-size Size[B|KB|MB|GB|TB]]" +
+                    " [-bufferSize] Bytes]" +
                     " [-baseDir baseDir]";
 
     private static final String BASE_FILE_NAME = "test_io_";
@@ -195,6 +196,8 @@ public class DFSIO implements Tool {
                 nrFiles = Integer.parseInt(args[++i]);
             } else if (arg.equalsIgnoreCase("-size")) {
                 nrBytes = parseSize(args[++i]);
+            } else if (arg.equalsIgnoreCase("-bufferSize")) {
+                bufferSize = Integer.parseInt(args[++i]);
             } else if (arg.equalsIgnoreCase("-baseDir")) {
                 baseDir = args[++i];
             } else {
