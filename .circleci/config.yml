@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/dfsio
+    docker:
+      - image: circle-ci/openjdk:8-jdk-stretch
+    steps:
+      - checkout
+      - restore_cache:
+          key: dfsio-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: dfsio-{{ checksum "pom.xml" }}
+      - run: mvn package
