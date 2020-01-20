@@ -25,9 +25,9 @@ object KMeansGenWorkload extends WorkloadDefaults {
   val numPartitions: Int = 2
 
   def apply(m: Map[String, Any]): KMeansGenWorkload = new KMeansGenWorkload(
-    numRows = getOrThrow(m, "rows").asInstanceOf[Int],
-    numCols = getOrThrow(m, "cols").asInstanceOf[Int],
-    output = Some(getOrThrow(m, "output").asInstanceOf[String]),
+    numRows = getOrThrow[Int](m, "rows"),
+    numCols = getOrThrow[Int](m, "cols"),
+    output = Some(getOrThrow[String](m, "output")),
     k = getOrDefault[Int](m, "k", numClusters),
     scaling = getOrDefault[Double](m, "scaling", scaling),
     numPartitions = getOrDefault[Int](m, "partitions", numPartitions)

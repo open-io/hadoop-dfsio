@@ -15,11 +15,10 @@ object Utils {
     }
   }
 
-  def getOrThrow(m: Map[String, Any], key: String): Any = getOrThrow(m.get(key))
+  def getOrThrow[A](m: Map[String, Any], key: String): A = getOrThrow(m.get(key), key).asInstanceOf[A]
 
-  def getOrThrow[A](opt: Option[A]): A = opt match {
+  def getOrThrow[A](opt: Option[A], msg: String): A = opt match {
     case Some(x) => x
-    case _ => throw new Exception("Empty Option")
+    case _ => throw new Exception(s"No such key: $msg")
   }
-
 }
