@@ -1,6 +1,6 @@
 package io.openio.spark.test
 
-import java.io.File
+import java.io.{File, IOException}
 
 import io.openio.spark.utils.SparkUtils.writeOutput
 import io.openio.spark.workload.KMeansGenWorkload
@@ -19,7 +19,29 @@ class TestFixtures(path: String) {
   }
 
   def deleteWorkspace(): Unit = {
-    // TODO cleanup testFolder
+    val testFolder = new File(testFolderPath)
+    deleteRecursively(testFolder)
+  }
+
+  def listFiles(file: File): Seq[File] = {
+    if (file.exists()) {
+      val files = file.listFiles()
+      if (files == null) {
+        throw new IOException(s"Failed to list files for dir: $file")
+      }
+      files
+    } else {
+      List()
+    }
+  }
+
+  def deleteRecursively(file: File): Unit = {
+    if (file.isDirectory) {
+      for (child <- listFiles(file)) {
+        deleteRecursively(child)
+      }
+    }
+    file.delete()
   }
 
   def generateData(numRows: Int, numCols: Int, output: String): Unit = {
