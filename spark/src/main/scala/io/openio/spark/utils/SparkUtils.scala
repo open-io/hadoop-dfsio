@@ -22,6 +22,7 @@ object SparkUtils {
     format match {
       case Formats.parquet => spark.read.parquet(input)
       case Formats.csv => spark.read.csv(input)
+      case Formats.orc => spark.read.orc(input)
       case _ => throw new Exception(s"Unknown load format: $format")
     }
   }
@@ -31,6 +32,7 @@ object SparkUtils {
     format match {
       case Formats.parquet => df.write.parquet(output)
       case Formats.csv => df.write.csv(output)
+      case Formats.orc => df.write.orc(output)
       case Formats.console => df.show()
       case _ => throw new Exception(s"Unknown save format: $format")
     }
