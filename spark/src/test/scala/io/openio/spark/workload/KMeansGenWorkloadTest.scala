@@ -22,6 +22,12 @@ class KMeansGenWorkloadTest extends AnyFlatSpec with Matchers with BeforeAndAfte
     testFixtures.deleteWorkspace()
   }
 
+  private def listPartFiles(path: String): Seq[File] = {
+    val file = new File(path)
+    val fileList = file.listFiles().toList
+    fileList.filter(_.getName.startsWith("part"))
+  }
+
   "KMeansGenWorkload" should "generate a csv output" in {
     val output = testFixtures.testFolderPath + "/output.csv"
     val m = Map(
@@ -33,12 +39,41 @@ class KMeansGenWorkloadTest extends AnyFlatSpec with Matchers with BeforeAndAfte
 
     val workloadResult = workload.doWork(spark = spark)
     workloadResult.show()
-    val file = new File(output)
-    val fileList = file.listFiles().toList
-    val partList = fileList.filter(_.getName.startsWith("part"))
-
+    val partList = listPartFiles(output)
     partList.length should be > 0
     val count = spark.read.csv(output).count()
+    count shouldBe 10
+  }
+
+  "KMeansGenWorkload" should "generate a orc output" in {
+    val output = testFixtures.testFolderPath + "/output.orc"
+    val m = Map(
+      "rows" -> 10,
+      "cols" -> 10,
+      "output" -> output
+    )
+    val workload = KMeansGenWorkload(m)
+    val workloadResult = workload.doWork(spark = spark)
+    workloadResult.show()
+    val partList = listPartFiles(output)
+    partList.length should be > 0
+    val count = spark.read.orc(output).count()
+    count shouldBe 10
+  }
+
+  "KMeansGenWorkload" should "generate a parquet output" in {
+    val output = testFixtures.testFolderPath + "/output.parquet"
+    val m = Map(
+      "rows" -> 10,
+      "cols" -> 10,
+      "output" -> output
+    )
+    val workload = KMeansGenWorkload(m)
+    val workloadResult = workload.doWork(spark = spark)
+    workloadResult.show()
+    val partList = listPartFiles(output)
+    partList.length should be > 0
+    val count = spark.read.parquet(output).count()
     count shouldBe 10
   }
 }
