@@ -24,7 +24,12 @@ class KMeansGenWorkloadTest extends AnyFlatSpec with Matchers with BeforeAndAfte
 
   "KMeansGenWorkload" should "generate a csv output" in {
     val output = testFixtures.testFolderPath + "/output.csv"
-    val workload = KMeansGenWorkload(None, Some(output), 10, 10, 1, 1.0, 1)
+    val m = Map(
+      "rows" -> 10,
+      "cols" -> 10,
+      "output" -> output
+    )
+    val workload = KMeansGenWorkload(m)
 
     val workloadResult = workload.doWork(spark = spark)
     workloadResult.show()
