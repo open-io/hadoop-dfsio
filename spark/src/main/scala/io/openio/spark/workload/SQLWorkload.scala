@@ -1,8 +1,8 @@
 package io.openio.spark.workload
 
-import io.openio.spark.Workload
+import io.openio.spark.{Workload, WorkloadDefaults}
 import io.openio.spark.utils.SparkUtils.{loadInput, writeOutput}
-import io.openio.spark.utils.Utils.measureTime
+import io.openio.spark.utils.Utils.{getOrThrow, measureTime}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 case class SQLWorkloadResult(
@@ -13,6 +13,15 @@ case class SQLWorkloadResult(
                               writeTime: Long = 0L,
                               totalTime: Long
                             )
+
+object SQLWorkload extends WorkloadDefaults {
+  val name = "sql"
+  def apply(m: Map[String, Any]): SQLWorkload = new SQLWorkload(
+    input = Some(getOrThrow[String](m, "input")),
+    output = Some(getOrThrow[String](m, "output")),
+    queryStr = getOrThrow[String](m, "query")
+  )
+}
 
 case class SQLWorkload(input: Option[String],
                        output: Option[String] = None,
