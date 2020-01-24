@@ -152,6 +152,11 @@ public class DFSIO implements Tool {
         return new Path(getBaseDir(config), "data");
     }
 
+    private static Path getDataFilePath(Configuration config, String name) {
+        Path filePathDir = new Path(getDataDir(config), name);
+        return new Path(filePathDir, name);
+    }
+
     private Path getReduceFilePath(TestType testType) {
         Path dir = null;
         if (testType == TestType.TEST_TYPE_READ) {
@@ -312,7 +317,7 @@ public class DFSIO implements Tool {
 
         @Override
         public Closeable getIOStream(String name) throws IOException {
-            Path filePath = new Path(getDataDir(getConf()), name);
+            Path filePath = getDataFilePath(getConf(), name);
             OutputStream out = fs.create(filePath, true, bufferSize);
             LOG.info("out = " + out.getClass().getName());
             return out;
@@ -347,7 +352,8 @@ public class DFSIO implements Tool {
 
         @Override
         public Closeable getIOStream(String name) throws IOException {
-            InputStream in = fs.open(new Path(getDataDir(getConf()), name));
+            Path filePath = getDataFilePath(getConf(), name);
+            InputStream in = fs.open(filePath);
             LOG.info("in = " + in.getClass().getName());
             return in;
         }
