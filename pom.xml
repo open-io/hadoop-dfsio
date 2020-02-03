@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>dfsio</module>
+        <module>mr</module>
         <module>spark</module>
     </modules>
     <properties>
